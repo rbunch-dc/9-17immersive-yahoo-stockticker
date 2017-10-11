@@ -1,0 +1,23 @@
+<?xml version="1.0"?><!-- some other code here -->
+<clients>
+<!-- some other code here -->
+ 
+	<function>
+	</function>
+ 
+	<function>
+	</function>
+ 
+	<function>
+		<name>data_values</name>
+		<variables>
+			<variable><!-- some other code here -->
+				<name>temp</name>
+	<!-- some other code here --> <type>double</type>
+			</variable>
+		</variables><!-- some other code here -->
+		<block><!-- some other code here -->
+			<opster>temp = 1</opster>
+		</block>
+	</function>
+</clients>
