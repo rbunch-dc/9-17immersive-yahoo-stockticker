@@ -4,6 +4,38 @@
 // 4. Get the response from Yahoo and update teh DOM
 
 $(document).ready(()=>{
+
+	// setItem takes 2 args:
+	// 1. Name of the var
+	// 2. Value to set
+	var watchList = [
+		"goog",
+		"msft",
+		"tsla",
+		"tata",
+		"race"
+	];
+	// ENTER... JSON.stringify
+	// var watchListAsString = JSON.stringify(watchList);
+
+	// console.log(typeof(watchList));
+	// console.log(typeof(watchListAsString));
+
+	// console.log(watchList)
+	// console.log(watchListAsString)
+
+	// // ENTER... JSON.parse
+	// var watchListAsAnObjectAgain = JSON.parse(watchListAsString);
+	// console.log(watchListAsAnObjectAgain);
+
+
+	// localStorage.setItem('watchList',"race");
+	// var watchList = localStorage.getItem('watchList');
+	// console.log(localStorage.watchList);
+
+
+	// var now = new Date();
+
 	var firstView = true;
 	$('.yahoo-finance-form').submit((event)=>{
 		// Stop the browser from sending the page on... we will handle it.
@@ -39,13 +71,18 @@ $(document).ready(()=>{
 	})
 
 	function buildRow(stockInfo){
-		if(stockInfo.Change.indexOf('+') > -1){
-			// That means the stock is up!
-			var classChange = "success";
+		if(stockInfo.Change !== null){
+			if(stockInfo.Change.indexOf('+') > -1){
+				// That means the stock is up!
+				var classChange = "success";
+			}else{
+				// Stock is down :(
+				var classChange = "danger";
+			}			
 		}else{
-			// Stock is down :(
-			var classChange = "danger";
+			stockInfo.Change = "Market Closed."
 		}
+
 		var newRow = '';
 		newRow += '<tr>'; 
 			newRow += `<td>${stockInfo.Symbol}</td>`;
