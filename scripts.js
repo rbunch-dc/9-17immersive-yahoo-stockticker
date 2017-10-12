@@ -83,10 +83,21 @@ $(document).ready(()=>{
 					oldAsJSON = [];
 				}
 				// JSON.parse has just untangled our lights. We have an object/array
-				oldAsJSON.push(stockToSave);
-				console.log(oldAsJSON);
-				var newWatchListAsString = JSON.stringify(oldAsJSON);
-				localStorage.setItem('watchList',newWatchListAsString);
+
+				// Before we push it on to the array, Check to see if its in the array...
+				// indexOf to the rescue.
+				if(oldAsJSON.indexOf(stockToSave) > -1){
+					// the stock is already in the list. 
+					// We don't know where, but it's there because it didn't
+					// return -1
+					console.log("Stock already saved.")
+				}else{
+					oldAsJSON.push(stockToSave);
+					console.log(oldAsJSON);
+					var newWatchListAsString = JSON.stringify(oldAsJSON);
+					localStorage.setItem('watchList',newWatchListAsString);
+					updateWatchList()
+				}
 			})
 		});
 	})
@@ -116,6 +127,24 @@ $(document).ready(()=>{
 		newRow += '</tr>';		
 		return newRow;
 	}
+
+	function updateWatchList(){
+		$('#stock-table-saved-body').html('')
+		// get the watchlist
+		var watchList = localStorage.getItem('watchList');
+		// Problem. The CHristmas Ligths are tangled.
+		var watchListAsJSON = JSON.parse(watchList);
+		watchListAsJSON.map((symbol,index)=>{
+			// console.log(symbol);
+			var url = 'http://query.yahooapis.com/v1/public/yql?q=env%20%27store://datatables.org/alltableswithkeys%27;select%20*%20from%20yahoo.finance.quotes%20where%20symbol%20in%20(%22'+symbol+'%22)%0A%09%09&env=http%3A%2F%2Fdatatables.org%2Falltables.env&format=json';
+			$.getJSON(url, (stockData)=>{
+				var stockInfo = stockData.query.results.quote;
+				var newRow = buildRow(stockInfo);
+				$('#stock-table-saved-body').append(newRow);
+			})
+		});
+	}
+
 });
 
 
