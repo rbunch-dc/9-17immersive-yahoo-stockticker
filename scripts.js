@@ -7,14 +7,14 @@ $(document).ready(()=>{
 
 	// setItem takes 2 args:
 	// 1. Name of the var
-	// 2. Value to set
-	var watchList = [
-		"goog",
-		"msft",
-		"tsla",
-		"tata",
-		"race"
-	];
+	// // 2. Value to set
+	// var watchList = [
+	// 	"goog",
+	// 	"msft",
+	// 	"tsla",
+	// 	"tata",
+	// 	"race"
+	// ];
 	// ENTER... JSON.stringify
 	// var watchListAsString = JSON.stringify(watchList);
 
@@ -35,6 +35,15 @@ $(document).ready(()=>{
 
 
 	// var now = new Date();
+
+	// Get the watchlist
+	var watchList = localStorage.getItem('watchList');
+	// If it's null, they dont ahve any saved.
+	if(watchList !== null){
+		// if it's not, update the DOM
+		updateWatchList();		
+	}
+
 
 	var firstView = true;
 	$('.yahoo-finance-form').submit((event)=>{
@@ -67,7 +76,11 @@ $(document).ready(()=>{
 			}else{
 				$('#stock-table-body').append(newRow);
 			}
-			$('td button').click(function(){
+
+			// Rocket function vs. function():
+			// - rocket function does NOT create a new "this"
+			// - function() "usually" creates a new "this"
+			$('.save-button').click(function(){
 				// console.log("User clicked on a button!")
 				// console.log($(this).attr('symbol'));
 				// add a click listener to all the buttons in the tables.
@@ -122,8 +135,8 @@ $(document).ready(()=>{
 			newRow += `<td>${stockInfo.Ask}</td>`;
 			newRow += `<td>${stockInfo.Bid}</td>`;
 			newRow += `<td class="bg-${classChange}">${stockInfo.Change}</td>`;
-			newRow += `<td><button symbol=${stockInfo.Symbol} class="btn btn-success">Save</button></td>`;
-			newRow += `<td><button symbol=${stockInfo.Symbol} class="btn btn-danger">Delete</button></td>`;
+			newRow += `<td><button symbol=${stockInfo.Symbol} class="btn btn-success save-button">Save</button></td>`;
+			newRow += `<td><button symbol=${stockInfo.Symbol} class="btn btn-danger delete-button">Delete</button></td>`;
 		newRow += '</tr>';		
 		return newRow;
 	}
