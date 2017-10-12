@@ -67,6 +67,27 @@ $(document).ready(()=>{
 			}else{
 				$('#stock-table-body').append(newRow);
 			}
+			$('td button').click(function(){
+				// console.log("User clicked on a button!")
+				// console.log($(this).attr('symbol'));
+				// add a click listener to all the buttons in the tables.
+				// when clicked on, save the symbol to localStorage.
+				var stockToSave = $(this).attr('symbol');
+				var oldWatchlist = localStorage.getItem('watchList');
+				// oldWatchlist just came out of localStorage. Like Christmas lights come otu of storage.
+				// How? TANGLED. We need to untangle them. JSON.parse
+				var oldAsJSON = JSON.parse(oldWatchlist);
+				// if the user has never saved anything, there will be nothing
+				// 	to parse. This will reutnr null in JSON.parse
+				if(oldAsJSON === null){
+					oldAsJSON = [];
+				}
+				// JSON.parse has just untangled our lights. We have an object/array
+				oldAsJSON.push(stockToSave);
+				console.log(oldAsJSON);
+				var newWatchListAsString = JSON.stringify(oldAsJSON);
+				localStorage.setItem('watchList',newWatchListAsString);
+			})
 		});
 	})
 
@@ -90,6 +111,8 @@ $(document).ready(()=>{
 			newRow += `<td>${stockInfo.Ask}</td>`;
 			newRow += `<td>${stockInfo.Bid}</td>`;
 			newRow += `<td class="bg-${classChange}">${stockInfo.Change}</td>`;
+			newRow += `<td><button symbol=${stockInfo.Symbol} class="btn btn-success">Save</button></td>`;
+			newRow += `<td><button symbol=${stockInfo.Symbol} class="btn btn-danger">Delete</button></td>`;
 		newRow += '</tr>';		
 		return newRow;
 	}
